@@ -1,0 +1,1 @@
+from captures.dynatrace_capture import capture_dynatrace
