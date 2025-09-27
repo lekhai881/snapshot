@@ -1,0 +1,1 @@
+windown: PS C:\Users\LE SY KHAI\Desktop\New folder> .\build_secure.bat
