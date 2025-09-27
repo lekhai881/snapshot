@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <title>Screenshot Tool</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <style>
+    .progress-container { margin-top:10px; width: 100%; background-color: #ddd; }
+    .progress-bar { width: 0%; height: 25px; background-color: #4caf50; text-align:center; color:white; line-height:25px; }
+    .mfa-code { font-size: 24px; font-weight: bold; color: #ff6600; background: #f0f0f0; padding: 15px; margin: 10px 0; text-align: center; }
+    .login-section { background: #f9f9f9; padding: 15px; margin: 20px 0; border-radius: 5px; }
+    .password-container { position: relative; display: inline-block; }
+    .toggle-password { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; }
+  </style>
+  <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
+</head>
+<body style="font-family: Arial; margin: 40px;">
+  <h2>Screenshot Tool</h2>
+  
+  <div class="login-section" id="loginSection" style="display:{{login_display}}">
+    <h3>Grafana Login</h3>
+    <label>Username:</label><br>
+    <input type="text" id="grafana_user" placeholder="Nhập username Grafana" style="width:250px" value="{{grafana_user or ''}}"><br><br>
+    <label>Password:</label><br>
+    <div class="password-container">
+       <input type="password" id="grafana_pass" placeholder="Nhập password Grafana" style="width:250px; padding-right:35px;" value="{{grafana_pass or ''}}">
+      <span class="toggle-password">👁️</span>
+    </div><br><br>
+    <button type="button" id="login_btn">Login</button>
+  </div>
+  
+  <form id="mainForm" style="display:{{form_display}}">
+    <input type="hidden" name="grafana_user" id="hidden_user">
+    <input type="hidden" name="grafana_pass" id="hidden_pass">
+    
+    <label>Start Time (YYYY-MM-DD HH:MM):</label><br>
+    <input type="text" name="start" value="{{start}}" style="width:250px"><br><br>
+    
+    <label>End Time (YYYY-MM-DD HH:MM):</label><br>
+    <input type="text" name="end" value="{{end}}" style="width:250px"><br><br>
+    
+    <label>Services:</label><br>
+    <div class="multiselect-container" style="position:relative; width:400px;">
+      <input type="text" id="services-input" name="services" value="{{services}}" placeholder="Click to select services..." readonly style="width:100%; cursor:pointer; padding-right:1px;">
+      <span style="position:absolute; right:2px; top:50%; transform:translateY(-50%); pointer-events:none; font-size:12px;">▼</span>
+      <div id="services-dropdown" class="dropdown" style="display:none; position:absolute; top:100%; left:0; width:100%; max-height:200px; overflow-y:auto; border:1px solid #ccc; background:white; z-index:1000;">
+        <input type="text" id="search-input" placeholder="Search services..." style="width:calc(100%-10px); margin:5px; padding:5px;">
+        <div id="services-list"></div>
+      </div>
+    </div><br><br>
+    
+    <button type="submit" id="capture_btn">Capture Screenshot</button>
+  </form>
+  <p id="status_msg" style="color:green; font-weight:bold; margin-top:15px;"></p>
+  
+  <div id="progress_section" style="display:none; margin-top:20px;">
+    <h3>Tiến trình capture ảnh:</h3>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar">0/0 ảnh</div>
+    </div>
+    <p id="current-capture" style="margin-top:10px; font-style:italic;">Đang khởi tạo...</p>
+  </div>
+  
+  <div id="mfa_display"></div>
+  <p style="color:gray;">⏳ Ứng dụng sẽ tự động tắt sau <span id="counter" data-timeout="{{timeout}}">{{timeout}}</span> giây</p>
+  <p style="font-size:10px; color:#ccc; text-align:center; margin-top:50px;">Copyright belongs to khails@techcombank.com.vn</p>
+</body>
+</html>
